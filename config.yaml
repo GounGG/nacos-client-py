@@ -1,0 +1,6 @@
+configs:
+  - name: official-nginx
+    id: official
+    group: haproxy
+    path: "/etc/haproxy/haproxy.cfg"
+    command: "systemctl restart haproxy"
