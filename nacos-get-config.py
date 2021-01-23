@@ -36,7 +36,7 @@ class Watcher():
         snapshot_file = "{0}+{1}+{2}".format(status['data_id'], status['group'], NAMESPACE)
         for p in self.cf['configs']:
             if status['data_id'] == p['id'] and status['group'] == p['group']:
-                shutil.copy("/Users/jipu.fang/PycharmProjects/Jl/nacos-data/snapshot/{}".format(snapshot_file), p['path'])
+                shutil.copy("nacos-data/snapshot/{}".format(snapshot_file), p['path'])
             s, r = subprocess.getstatusoutput(p['command'])
             if int(s) != 0:
                 print("命令执行失败:{}".format(p['command']))
@@ -49,7 +49,7 @@ class Watcher():
 
 if __name__ == '__main__':
     # 传入配置
-    with open('/Users/jipu.fang/PycharmProjects/Jl/nacos-tools/config.yaml', 'r+') as f:
+    with open('config.yaml', 'r+') as f:
         cf = yaml.load(f, Loader=yaml.FullLoader)
 
     # # 常驻调度任务
