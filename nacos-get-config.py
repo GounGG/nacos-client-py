@@ -34,8 +34,6 @@ class Watcher():
             self.watch(id=p['id'], group=p['group'])
 
     def print_cm(self, status):
-        print("{0} {1} {2} 配置发生变更".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), status['data_id'],
-                                          status['group']))
         snapshot_file = "{0}+{1}+{2}".format(status['data_id'], status['group'], NAMESPACE)
         for p in self.cf['configs']:
             if status['data_id'] == p['id'] and status['group'] == p['group']:
@@ -60,4 +58,9 @@ if __name__ == '__main__':
     job = Watcher()
     # 每隔1分钟执行一次 job_func;
     scheduler.add_job(job.run, 'interval', minutes=1)
-    scheduler.start()
+    try:
+        print("{0} {1} {2} nacos watch the process start".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+        scheduler.start()
+    except (KeyboardInterrupt, SystemExit):
+        print("{0} {1} {2} nacos watch the process exit".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+        scheduler.shutdown()
