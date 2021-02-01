@@ -37,7 +37,7 @@ class Watcher():
         snapshot_file = "{0}+{1}+{2}".format(status['data_id'], status['group'], NAMESPACE)
         for p in self.cf['configs']:
             if status['data_id'] == p['id'] and status['group'] == p['group']:
-                shutil.copy("nacos-data/snapshot/{}".format(snapshot_file), p['path'])
+                shutil.copyfileobj(open("nacos-data/snapshot/{}".format(snapshot_file), "rb"), open(p['path'], "wb"))
             s, r = subprocess.getstatusoutput(p['command'])
             if int(s) != 0:
                 print("命令执行失败:{}".format(p['command']))
