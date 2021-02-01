@@ -59,8 +59,8 @@ if __name__ == '__main__':
     # 每隔1分钟执行一次 job_func;
     scheduler.add_job(job.run, 'interval', minutes=1)
     try:
-        print("{0} {1} {2} nacos watch the process start".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+        print("{0} nacos watch the process start".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
         scheduler.start()
     except (KeyboardInterrupt, SystemExit):
-        print("{0} {1} {2} nacos watch the process exit".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+        print("{0} nacos watch the process exit".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
         scheduler.shutdown()
