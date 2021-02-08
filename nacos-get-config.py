@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding:utf-8
 
-import os
+import os,hashlib
 import shutil
 import subprocess
 from datetime import datetime
@@ -33,15 +33,22 @@ class Watcher():
             self.cf_path = p['path']
             self.watch(id=p['id'], group=p['group'])
 
+    def file_md5(self, file_path):
+        with open(file_path, 'rb') as file:
+            f = file.read()
+            m = hashlib.md5()
+            m.update(f)
+            return m.hexdigest()
+
     def print_cm(self, status):
         snapshot_file = "{0}+{1}+{2}".format(status['data_id'], status['group'], NAMESPACE)
         for p in self.cf['configs']:
             if status['data_id'] == p['id'] and status['group'] == p['group']:
-                shutil.copyfileobj(open("nacos-data/snapshot/{}".format(snapshot_file), "rb"), open(p['path'], "wb"))
-            s, r = subprocess.getstatusoutput(p['command'])
-            if int(s) != 0:
-                print("命令执行失败:{}".format(p['command']))
-                return False
+                if self.file_md5("nacos-data/snapshot/{}".format(snapshot_file)) != self.file_md5(p['path']):
+                    shutil.copyfileobj(open("nacos-data/snapshot/{}".format(snapshot_file), "rb"), open(p['path'], "wb"))
+                    s, r = subprocess.getstatusoutput(p['command'])
+                    if int(s) != 0:
+                        print("命令执行失败:{}".format(p['command']))
         return True
 
     def watch(self, id, group):
